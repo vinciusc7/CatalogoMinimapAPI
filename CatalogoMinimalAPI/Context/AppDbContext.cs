@@ -20,7 +20,16 @@ public class AppDbContext : DbContext
         mb.Entity<Categoria>().Property(c => c.Descricao).HasMaxLength(255).IsRequired();
 
         //Produto
-        mb.Entity<Produto>().HasKey(c => c.ProdutoId);
+        mb.Entity<Produto>().HasKey(p => p.ProdutoId);
+        mb.Entity<Produto>().Property(p =>  p.Nome).HasMaxLength(100).IsRequired();
+        mb.Entity<Produto>().Property(p => p.Descricao).HasMaxLength(150);
+        mb.Entity<Produto>().Property(p => p.ImagemUrl).HasMaxLength(255);
+        mb.Entity<Produto>().Property(p => p.Preco).HasPrecision(14, 2);
 
+        //relacionamento
+        mb.Entity<Produto>()
+            .HasOne<Categoria>(c => c.Categoria)
+                .WithMany(p => p.Produtos)
+                    .HasForeignKey(c => c.CategoriaId);
     }
 }
